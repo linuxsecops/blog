@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Kayra Otaner info@secops360.com">
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Prometheus 101 - SecOps360 Blog</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Prometheus 101";
+    var mkdocs_page_input_path = "prometheus/prometheus-101.md";
+    var mkdocs_page_url = "/prometheus/prometheus-101/";
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> SecOps360 Blog</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Prometheus</span>
+    <ul class="subnav">
+                <li class=" current">
+                    
+    <a class="current" href="./">Prometheus 101</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#giris">Giriş</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#prometheus-nedir-ve-hangi-dilde-yazld">Prometheus nedir ve hangi dilde yazıldı...</a></li>
+        
+            <li><a class="toctree-l4" href="#prometheus-neden-ortaya-ckt-ve-kimler-tarafndan-yazld">Prometheus neden ortaya çıktı ve kimler tarafından yazıldı...</a></li>
+        
+            <li><a class="toctree-l4" href="#neden-prometheus">Neden Prometheus?</a></li>
+        
+            <li><a class="toctree-l4" href="#prometheus-ekosisteminin-bilesenleri-exporter-lar">Prometheus ekosisteminin bileşenleri &amp; "exporter" lar.</a></li>
+        
+            <li><a class="toctree-l4" href="#prometheus-kurulumu-ve-ayarlar">Prometheus kurulumu ve ayarları.</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="https://www.secops360.com/">SecOps360</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">SecOps360 Blog</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Prometheus &raquo;</li>
+        
+      
+    
+    <li>Prometheus 101</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="giris">Giriş</h1>
+<p>Bu yazıda Prometheus'un ne olduğunu açıklayarak, hangi dilde yazıldığını ve hangi ihtiyacı karşılama amacı ile geliştirildiğini, alternatif uygulamalara göre avantajlarını ele alıp docker ortamında prometheus kurulumu yapılacaktır. Sonraki adımlarda ise Prometheus ekosistemine ait bileşenleri ela alıp bu sistem ile birlikte kullanılan zengin görsel yeteneklere sahip metrik analiz paketi olan <strong>Grafana</strong> ve <strong>Alert Managerden</strong> bahsedilecektir.</p>
+<h4 id="prometheus-nedir-ve-hangi-dilde-yazld">Prometheus nedir ve hangi dilde yazıldı...</h4>
+<p>Prometheus, Google 'in <a href="https://landing.google.com/sre/book/chapters/practical-alerting.html"><strong>Bormon</strong></a> Monitoring uygulamasından esinlenerek, <strong>Go</strong> dilinde yazılmış popüler <em>Açık Kaynak Kodlu</em> sistem izleme, uyarı ve <em>zaman serili veritabana sahip</em> <em>yeni nesil Monitoring sistemidir</em>.</p>
+<blockquote>
+<p>Prometheus Next-Generation Monitoring System, Open-Source, Time-Series Database,</p>
+</blockquote>
+<p>Özetle, 2012-2013 yıllarında SoundCluod firması Prometheus projesine başladı ve 2015'in başlarında halka açıldı. Prometheus'un Go dilinde yazıldığını belirtmiştik. Doğru bir ifade olması açısından çoğu bileşeni Go dilinde, bazı bileşenleri ise Java, Pyhton ve Ruby'de yazıldığını belirtmekte yarar var. Prometheus, <em>Apache 2.0 Lisansı</em> altında yayınlanmıştır. Şuan bağımsız Open-Soruce projesi olup çok sayıda geliştiricisi ve kullanıcı topluluğu bulunmaktadır. 2016 yılında <em>Cloud Native Computing Foundation</em> katıldı.</p>
+<h3 id="prometheus-neden-ortaya-ckt-ve-kimler-tarafndan-yazld">Prometheus neden ortaya çıktı ve kimler tarafından yazıldı...</h3>
+<p>SoundCloud firması momolotic yapıdan <em>microservice</em> mimarisine geçiş aşamalarında mevcutta kullandıkları Monitoring uygulamaları (StatsD ve Grafite...) yetersiz gelmeye başlamış durumdaydı. Firmanın ihtiyacları belliydi ve bu ihtiyaçlar çeşitli sistemlerde mevcuttu.  2012-2013 yıllarında bu özellikleri tek bir üründe toparlama kararı alınıp  Matt T. Proud ve Julius Volz tarafından projeye başlanmıştır. Böylece <code>Her şeyi ve her katmanı, aynı sistemle izleyebilen</code> Prometheus doğmuştur. Her katmandan kasıt, network katmanı, fiziksel host katmanı, docker katmanı, uygulama katmanı vs.. her bir seviye için halı hazırda Prometheus'un <strong>exporter</strong> adı verilen propları bulunmakta. Yeri gelince bu bileşenlerden detaylı bir şekilde bahsediyor olacağız.</p>
+<p>SoundCloud firması microservise mimarisine geçişi esnasında ihtiyaç duyduğu özelliker ise aşağıdaki gibidir.</p>
+<ul>
+<li>
+<p><strong>A multi-dimensional data model.</strong> (Çok boyutlu veri modeli) 
+Verinin ihtiyaca göre ayrışmasının sağlanması. instance, service, endpoint, method vs.</p>
+</li>
+<li>
+<p><strong>Operational simplicity.</strong> (Operasyonel basitlik)
+Yerel iş istasyonları bile istenilen yer ve zamanda Monitoring sunucusuna kolayca cevrilebilme.</p>
+</li>
+<li>
+<p><strong>Scalable data collection and decentralized architecture.</strong> (Ölçeklenebilir veri toplama ve merkezi olmayan mimari)
+Farklı ekipler bağımsız Monitör sistemi kurabilir ve servisleri güvenilir bir şekilde izleyebilmeliler.</p>
+</li>
+<li>
+<p><strong>A powerful query language.</strong> (Güçlü bir sorgulama dili.)
+Anlamlı uyarılar, grafikler ve sorgular oluşturabilmek için özel data modeli kullanmalı.  </p>
+</li>
+</ul>
+<h3 id="neden-prometheus">Neden Prometheus?</h3>
+<ul>
+<li>A Monitoring and alerting system for distributed systems and infrastructure (Dağıtılmış sistemler ve altyapı için bir izleme ve uyarı sistemidir)</li>
+<li>Highly  scalable (Yüksek ölçeklenebilirlik)</li>
+<li>Highly  available (Yüksek erişebilirlik)</li>
+<li>Minimal  external  dependencies (Minimum dış bağımlılıklar)</li>
+<li>Easy  deployment (Kolay dağıtım)</li>
+<li>Lots  of  existing  integrations (Çok sayıda mevcut entegrasyon )</li>
+<li>Extensive  documentation (Kapsamlı dokümantasyon)</li>
+<li>Commercial  support  available (Ticari destek mevcut)</li>
+<li>Designed  with  microservices  and  distributed  architectures  in  mind (Mikro-Makro servis için uygun olması)</li>
+<li>Not a long-term archival system (Uzun vMonitoringadeli arşiv sistemi değildir)</li>
+<li>Bussiness intelligence reporting system. (Raporlama aracı değildir)</li>
+<li>Not a data-mining backend. (Veri madenciliği backend 'inde kullanılmaz)</li>
+</ul>
+<p>Prometheus'un Nagios, Sensu, Graphite, InfluxDB ve OpenTSDB ile detaylı karşılaştımalarını  <a href="https://prometheus.io/docs/introduction/comparison/">bu likten</a> inceleyebilirsiniz.</p>
+<h3 id="prometheus-ekosisteminin-bilesenleri-exporter-lar">Prometheus ekosisteminin bileşenleri &amp; "<em>exporter</em>" lar.</h3>
+<p>Her şeyi, her seviyedeki katmanı, aynı sistem ile izlemeyi  mümkün kılan <em>yeni nesil Monitoring ekosistemi</em> olan <strong>Prometheus</strong> için <em>Official</em> veya <em>Third-party exporters</em> bulunmakta. Bu exporter 'lar sayesinde elde edilen metrikler, HDD doluluk oranı, swap kullanımı, ping kaybı, uygulamada ki hatalar veya benzeri istatiksel veriler istenir ise <em>Alermanager</em> yardımıyla email, slack, PagerDuty, Generic Webhooks, OpsGenie, Pushover, HipChat gibi dış servislere gönderimi sağlanabilir. Prometheus 'un <em>ekosistem</em> olarak ifade edilme sebebi uçtan uca tam bir Monitör ve alert sistemi olup dış servisler ile entegre olmasına bağlıyabiliriz. </p>
+<p>Prometheus, monitör edilmesi istenilen sunuculardaki, HTTP endpointlerinden kazıdıkları metrikleri toplar ve depolar. Bu özelliği ile yani HTTP üzerinden verilerin çekilmesi Prometheus'a bir dizi avantajlar sağlar ve diğer Monitoring ve alerting sistemlerinden farklı kılar. Kısacası monitör edilen kaynaklardan verileri gönderme (<em>push</em>) yerine, Prometheus monitör edilen kaynaklardan verileri çeker (<em>pull</em>). <em>Prometheus is pull-based Monitoring system...</em>
+Bazen kaynaklardan veri çekme yerine göndermemiz de gerekebilir. Bu durumlar için Prometheus'un <strong>PushGateway</strong> exporter 'dan yararlanabiliriz. 
+İleride  PushGateway ve push metriklerinden detaylı bir şekilde bahsedeceğiz.</p>
+<p><a href="https://devops.jaxlondon.com/wp-content/uploads/2016/05/Monitoring-a-Kubernetes-backed-microservice-architecture-with-Prometheus_Fabian-Reinartz-Bj%C3%B6rn-Rabenstein.pdf">Monitör everything, all levels, with the same system. </a></p>
+<table>
+<thead>
+<tr>
+<th align="left">Katman-Seviye</th>
+<th align="left">Neyi Monitör Eder veya Niçin Kullanılır</th>
+<th>Kullanılan Exporter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Network</td>
+<td align="left">Router, switch, acces point, modem  vs..</td>
+<td>SNMP-Exporter</td>
+</tr>
+<tr>
+<td align="left">Host, OS, Hardware</td>
+<td align="left">OS, Donanım, kaynakları bilgileri.. cpu, ram, hdd</td>
+<td>Node-Exporter</td>
+</tr>
+<tr>
+<td align="left">Uygulama</td>
+<td align="left">Latency, errors, QPS, internal state</td>
+<td>PushGateway</td>
+</tr>
+<tr>
+<td align="left">Container</td>
+<td align="left">Kaynak kullanımı ve container performans değerleri</td>
+<td>cAdvisor</td>
+</tr>
+<tr>
+<td align="left">Orchestration</td>
+<td align="left">Cluster kaynakları, scheduling</td>
+<td>Kubernetes components</td>
+</tr>
+</tbody>
+</table>
+<p>Exporter ile ilgili daha fazla bilgi ve detay için <a href="https://prometheus.io/docs/instrumenting/exporters/">burayı</a> tıklayın.</p>
+<p><img alt="resim1" src="../img/prometheus00.png" /></p>
+<!-- 
+### Prometheus desteklediği metrik türleri:
+- Counter, **Sayaç** is a cumulative metric that represents a value that only ever goes up, like a request count.
+- Gauge, **Ölçme** is a metric that represents a value that can arbitrarily go up and down, like a temperature or a queue length.
+- Summary, **Özet** (summary) is a client-side calculated histogram of observations, usually used to measure request durations or sizes.
+- Histogram samples observations (usually things like request durations or response sizes) and counts them in configurable buckets. It also provides a sum of all observed values. A histogram with a base metric name of <basename> exposes multiple time series during a scrape:
+-->
+
+<h3 id="prometheus-kurulumu-ve-ayarlar">Prometheus kurulumu ve ayarları.</h3>
+<p>Promethe'us kurulumu çok basit olmasına rağmen config dosyasını doğru şekilde ayarlamalı ve amacımıza hizmet etmesi sağlamalıyız. Prometheus'un ayar dosyası <em>yml</em> uzantılı yani <strong>yaml</strong> dosya formatındadir.  Docker ortamında Prometheus ayağı kaldırdığımızda varsayılan prometheus config dosyası aşağıdaki gibidir. Prometheus'un config yml dosyasını kendimiz oluşturup daha sonrasında bu dosyayı güncelleyeceğimiz için docker ortamında <strong>Volumes &amp; Bind-Mount</strong> özelliğini kullancağız.
+Prometheus varsayılan olarak 9090 portundan çalışır ve 15 günlük datayı üstünde tutar. Bu gibi ayarları değiştirmek için Prometheus sunucusunda "<strong>./prometheus -h</strong>" komutunu kullanarak istenilen ayarları güncelleyebiliriz.</p>
+<p>Hızlı bir şekilde container ortamında prometheus'u ayağı kaldırıp kurmak için komut:</p>
+<pre><code class="bash">docker run -d --name prometheus -p 9090:9090 prom/prometheus
+</code></pre>
+
+<p>Volumes &amp; bind-mount ile kalıcı config dosyası ile kurulum için komut:</p>
+<pre><code class="bash">docker run -d --name prometheus -p 9090:9090 \
+       -v /mnt/Monitoring/prometheus:/etc/prometheus \
+       prom/prometheus --config.file=/etc/prometheus/prometheus.yml
+</code></pre>
+
+<p><img alt="resim2" src="../img/prometheus01.png" /></p>
+<p>Kurulumu yaptıktan sonra <strong><em><code>http://ServerIp:9090/</code></em></strong> şeklinde prometheus 'a giriş yapabiliriz. <strong>Targets</strong> kısmında ise <strong>Endpoint</strong> 'lermizin durumlarını <strong><em>UP</em></strong> olarak görmemiz gerekiyor.</p>
+<p><img alt="resim3" src="../img/prometheus02.png" />
+<img alt="resim4" src="../img/prometheus03.png" /></p>
+<p>Promethues'un <code>YAML</code> dosyasını biraz daha incelemekte yarar var. Aşağıdaki config dosyasında <code>global</code>, varsayılan ayarları belirlememizi sağlar.
+<code>scrape_interval</code>, metrikleri kazıma aralık süresini, <code>evaluation_interval</code> ise  hesaplama, değer aralık süresini belirler.</p>
+<blockquote>
+<p>prometheus.yml</p>
+</blockquote>
+<pre><code class="yaml"># my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - &quot;first_rules.yml&quot;
+  # - &quot;second_rules.yml&quot;
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=&lt;job_name&gt;` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+</code></pre>
+
+<p>Konfigirasyon dosyası olarak bu örnekte sadece <code>static_config</code> kullandık. Bunun dışındaki configler ise aşağıda sıralanmış ve kısaca açıklanmıştır. </p>
+<ul>
+<li>
+<p><code>&lt;static_config&gt;</code>: En yaygın kullanılan ayar parametrisidir. İzlenecek sunucunun ip, port vs. bilgileri statik olacak girilir.</p>
+</li>
+<li>
+<p><code>&lt;tls_config&gt;</code>: TLS bağlantısı yapabilmemiz için gerekli bilgileri girmemizi sağlayan parametredir. <em>Transporter Layer Security</em> yani iki bilgisayar arasında ki iletişim güvenli bir katman üzerinden gerçekleşmesini sağlayan protokoldür. </p>
+</li>
+<li>
+<p><code>&lt;file_sd_config&gt;</code>: En yaygın kullanılan diğer bir parametredir. Statik veya "Service Discovery" ile  izlenecek hedefleri bulan bir mekanizmadır. JSON dosya uzantılı olmaladır.</p>
+</li>
+<li>
+<p><code>&lt;gce_sd_config&gt;</code>: Google Cloud Platform üzerindeki projemizin izleneme bilmesi adına bilgi ve ayarların girilebileceği parametredir.</p>
+</li>
+<li>
+<p><code>&lt;ec2_sd_config&gt;</code>: AWS EC2 'yi Monitör hesabımızı izlemek için gerekli bilgilerin giribileceği parametredir.</p>
+</li>
+<li>
+<p><code>&lt;alertmanager_config&gt;</code>: Monitör ettiğimiz sistemlerden aldığımız uyarıları göndereceğimiz sistemlerin veya servislerin bilgilerini girebilmemiz için gerekli parametredir. </p>
+</li>
+</ul>
+<p>Azure, Kubernetes, OpenStack ve Conlus gibi bir çok hizmeti veya servisi Monitör edebilmemiz için gerekli config parametresi bulunmaktadır. Detaylı bilgiye ise <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#%3Cstatic_config%3E">buradan</a> ulaşabilirsiniz.</p>
+<pre><code>&lt;kubernetes_sd_config&gt;
+&lt;openstack_sd_config&gt;
+&lt;azure_sd_config&gt;
+&lt;consul_sd_config&gt;
+&lt;dns_sd_config&gt;
+&lt;file_sd_config&gt;
+&lt;marathon_sd_config&gt;
+&lt;nerve_sd_config&gt;
+&lt;serverset_sd_config&gt;
+&lt;triton_sd_config&gt;
+&lt;relabel_config&gt;
+&lt;metric_relabel_configs&gt;
+&lt;alert_relabel_configs&gt;
+&lt;alertmanager_config&gt;
+&lt;remote_write&gt;
+&lt;remote_read&gt;
+&lt;scrape_config&gt;
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
