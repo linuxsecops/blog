@@ -1,0 +1,12 @@
+site_name: SecOps360 Blog
+site_url: http://blog.secops360.com
+site_author: Kayra Otaner info@secops360.com
+theme:
+    name: 'readthedocs'
+nav:
+    - Prometheus:
+        - Prometheus 101: ./prometheus/prometheus-101.md
+
+    - SecOps360: "https://www.secops360.com/"
+#default: ['tr']
+
